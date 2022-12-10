@@ -21,19 +21,21 @@ d = int(d)
 
 
 file_name_choose = input('Введите:  \n 1 для чтения из open_text.txt (зашифрования) \n 2 для чтения из close_text.txt (расшифрования)  \n')
-if 1:
-    fr = open('open_text.txt')
+if file_name_choose == '1':
+    fr = open('open_text.txt', encoding='utf-8')
     text = fr.read()
-    fw = open('close_text.txt', 'w')
+    fw = open('close_text.txt', 'w', encoding='utf-8')
     m = RSA_functions.get_encrypt_block(text, n)
+    # sym = RSA_functions.encrypt(m, e, n)
+    # fw.write(sym)
     for sym in RSA_functions.encrypt(m, e, n):
-        fw.write(str(sym))
-elif 2:
-    fr = open('close_text.txt')
+        fw.write(sym)
+elif file_name_choose == '2':
+    fr = open('close_text.txt', encoding='utf-8')
     text = fr.read()
-    fw = open('open_text.txt', 'w')
+    fw = open('open_text.txt', 'w', encoding='utf-8')
     c = RSA_functions.get_decrypt_block(text, n)
     for sym in RSA_functions.decrypt(c, d, n):
-        fw.write(str(sym))
+        fw.write(sym)
 fr.close()
 fw.close()

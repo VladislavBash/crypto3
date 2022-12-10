@@ -86,15 +86,47 @@ def calc_exp_decrypt(e, phi): # Вычисление экспоненты рас
 
 def encrypt(m, e, n): # Зашифрование
     c = []
-    for mi in m:
-        c.append(pow_mod(mi, e, n))
-    return c
+    bit_str = ''
+    c_str = ''
+    len_block = math.floor(math.log2(n)) + 1
+    str_len_block = '0' + str(len_block) + 'b'
+    for mi in reversed(m):
+        num =  pow_mod(mi, e, n)
+        bit_str += str(format(num, str_len_block))
+
+    if len(bit_str) % 8 != 0:
+        bit_str = ('0' * (8 - (len(bit_str) % 8))) + bit_str
+    
+    bit_str = bit_str[::-1]
+
+    for i in range(int(len(bit_str)/8)):
+        temp_str = bit_str[8*i:8*(i+1)]
+        # c.append(int(temp_str[::-1], 2))
+        c_str += chr(int(temp_str[::-1], 2))
+    # c.reverse()
+    return c_str
 
 def decrypt(c, d, n): # Расшифрование
-    m = []
-    for ci in c:
-        m.append(pow_mod(ci, d, n))
-    return m
+    c = []
+    bit_str = ''
+    c_str = ''
+    len_block = math.floor(math.log2(n)) + 1
+    str_len_block = '0' + str(len_block) + 'b'
+    for ci in reversed(c):
+        num =  pow_mod(ci, d, n)
+        bit_str += str(format(num, str_len_block))
+
+    if len(bit_str) % 8 != 0:
+        bit_str = ('0' * (8 - (len(bit_str) % 8))) + bit_str
+    
+    bit_str = bit_str[::-1]
+
+    for i in range(int(len(bit_str)/8)):
+        temp_str = bit_str[8*i:8*(i+1)]
+        # c.append(int(temp_str[::-1], 2))
+        c_str += chr(int(temp_str[::-1], 2))
+    # c.reverse()
+    return c_str
 
 def gen_keys():
     p = get_random_prime()
@@ -137,7 +169,7 @@ def get_decrypt_block(text, n):
     text.replace('\n', '')
     for sym in text:
         bit_str += format(ord(sym), '08b') # Перевод в 8-битную строку
-    len_block = math.floor(math.log2(n)) + 1
+    len_block = math.floor(math.log2(n))
     if len(bit_str) % len_block != 0:
         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
     # bit_str = bit_str[::-1]
@@ -151,3 +183,24 @@ def get_decrypt_block(text, n):
         block.append(int(bit_str[len_block*i:len_block*(i+1)], 2))
     block.reverse()
     return block
+# def get_decrypt_block(text, n):
+#     block = []
+#     bit_str = ''
+#     text.replace(' ', '')
+#     text.replace('\n', '')
+#     for sym in text:
+#         bit_str += format(ord(sym), '08b') # Перевод в 8-битную строку
+#     len_block = math.floor(math.log2(n)) + 1
+#     if len(bit_str) % len_block != 0:
+#         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
+#     # bit_str = bit_str[::-1]
+#     # bl = ''
+#     # for i in range(len(bit_str)):
+#     #     bl += i
+#     #     if :
+#     #         block.append()
+#     #         bl = ''
+#     for i in range(int(len(bit_str)/len_block)):
+#         block.append(int(bit_str[len_block*i:len_block*(i+1)], 2))
+#     block.reverse()
+#     return block
