@@ -2,3 +2,5 @@ __pycache__
 .vscode
 .pytest_cache
 settings.json
+open_text.txt
+close_text.txt
