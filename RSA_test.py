@@ -94,6 +94,18 @@ class Pow_Mod_Test(unittest.TestCase):
             RSA_functions.pow_mod(45645645712534, 94571454, 11231374),
             8705368
         )
+    
+    def test_check_pow_mod_4(self):
+        self.assertEqual(
+            RSA_functions.pow_mod(25112, 143637, 216424),
+            pow(25112, 143637, 216424)
+        )
+
+    def test_check_pow_mod_5(self):
+        self.assertEqual(
+            RSA_functions.pow_mod(7252971255756, 973645164, 72476745654),
+            pow(7252971255756, 973645164, 72476745654)
+        )
 
 class Check_Keys_Test(unittest.TestCase):
     def test_check_check_keys_1(self):
