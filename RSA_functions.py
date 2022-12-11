@@ -2,8 +2,13 @@ from random import randint
 import math
 POW = 20
 MODEL_NUMBER = 10**POW
+# MODEL_NUMBER = 100
 MIN_INT = MODEL_NUMBER
-MAX_INT = MODEL_NUMBER*10**5
+MAX_INT = MODEL_NUMBER * 10**5
+# MIN_INT = 20000000000000000000000000000000000000000000000000000000000000000000000000
+# MAX_INT = 20000000000000000000000000000000000000000000000000000000000000000000000000000000
+# MIN_INT = 180
+# MAX_INT = 200
 T = 100
 
 def get_random_prime():
@@ -40,7 +45,7 @@ def extended_euclidean_algorithm(num, mod):
         x1 = x
         y2 = y1
         y1 = y
-    return y2
+    return int(y2)
 
 def NOD(a, b):
     while b != 0:
@@ -79,7 +84,7 @@ def calc_Euler_func(p, q): # Вычисление функции Эйлера
 def calc_exp_encrypt(phi): # Вычисление экспоненты зашифрования
     e = get_random_prime()
     if (e != NOD(e, phi)):
-        return e / NOD(e, phi)
+        return int(e / NOD(e, phi))
 
 def calc_exp_decrypt(e, phi): # Вычисление экспоненты расшифрования
     return extended_euclidean_algorithm(e, phi)
@@ -104,13 +109,12 @@ def encrypt(m, e, n): # Зашифрование
         # c.append(int(temp_str[::-1], 2))
         c_str += chr(int(temp_str[::-1], 2))
     # c.reverse()
-    return c_str
+    return c_str[::-1]
 
 def decrypt(c, d, n): # Расшифрование
-    c = []
     bit_str = ''
     c_str = ''
-    len_block = math.floor(math.log2(n)) + 1
+    len_block = math.floor(math.log2(n))
     str_len_block = '0' + str(len_block) + 'b'
     for ci in reversed(c):
         num =  pow_mod(ci, d, n)
@@ -124,9 +128,12 @@ def decrypt(c, d, n): # Расшифрование
     for i in range(int(len(bit_str)/8)):
         temp_str = bit_str[8*i:8*(i+1)]
         # c.append(int(temp_str[::-1], 2))
-        c_str += chr(int(temp_str[::-1], 2))
+        if temp_str != '00000000':
+            c_str += chr(int(temp_str[::-1], 2))
+        # if  not ((i == int(len(bit_str)/8)-1) and (int(temp_str[::-1], 2) == 0)):
+        #     c_str += chr(int(temp_str[::-1], 2))
     # c.reverse()
-    return c_str
+    return c_str[::-1]
 
 def gen_keys():
     p = get_random_prime()
@@ -138,13 +145,13 @@ def gen_keys():
     phi = calc_Euler_func(p, q)
     e = calc_exp_encrypt(phi)
     d = calc_exp_decrypt(e, phi)
+    d += phi
     return e, n, d
 
 def get_encrypt_block(text, n):
     block = []
     bit_str = ''
-    text.replace(' ', '')
-    text.replace('\n', '')
+    # text = [s for s in text if (s != "\n") and (s != " ")]
     for sym in text:
         bit_str += format(ord(sym), '08b') # Перевод в 8-битную строку
     len_block = math.floor(math.log2(n))
@@ -165,13 +172,16 @@ def get_encrypt_block(text, n):
 def get_decrypt_block(text, n):
     block = []
     bit_str = ''
-    text.replace(' ', '')
-    text.replace('\n', '')
+    # text = [s for s in text if (s != "\n") and (s != " ")]
     for sym in text:
         bit_str += format(ord(sym), '08b') # Перевод в 8-битную строку
-    len_block = math.floor(math.log2(n))
-    if len(bit_str) % len_block != 0:
+    len_block = math.floor(math.log2(n)) + 1
+    if len(bit_str) < len_block:
         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
+    elif len(bit_str) > len_block:
+        bit_str = bit_str[(len(bit_str) % len_block):]
+    # if len(bit_str) % len_block != 0:
+    #     bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
     # bit_str = bit_str[::-1]
     # bl = ''
     # for i in range(len(bit_str)):

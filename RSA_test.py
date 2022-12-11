@@ -22,8 +22,8 @@ class Prime_Test(unittest.TestCase):
 
     def test_check_prime_4(self):
         self.assertEqual(
-            RSA_functions.check_prime(30),
-            False
+            RSA_functions.check_prime(5999158576590057802059601),
+            True
         )
 
 class Inverse_Number_Test(unittest.TestCase):
@@ -163,5 +163,65 @@ class Get_Encrypt_Block_Test(unittest.TestCase):
             [5199, 9537, 13605, 16]
         )
 
+class Encrypt_Text_Test(unittest.TestCase):
+    def test_check_encrypt_text_1(self):
+        text = 'CRYPTO'
+        n = 21583
+        e = 13
+        self.assertEqual(
+            RSA_functions.encrypt(RSA_functions.get_encrypt_block(text, n), e, n), 
+            "-%*d"
+        )
+    
+    def test_check_encrypt_text_2(self):
+        opText = 'HELLO'
+        n = 21583
+        e = 13
+        d = 1637
+        clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
+        self.assertEqual(
+            RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
+            opText
+        )
+    
+    def test_check_encrypt_text_3(self):
+        text = 'NAME'
+        n = 227923
+        e = 31
+        d = 7319
+        self.assertEqual(
+            RSA_functions.encrypt(RSA_functions.get_encrypt_block(text, n), e, n), 
+            "\x01\x97¬¨>"
+        )
+
+    def test_check_encrypt_text_4(self):
+        opText = 'HELLO'
+        e, n, d = RSA_functions.gen_keys()
+        e = int(e)
+        n = int(n)
+        d = int(d)
+        # n = 38809
+        # e = 181
+        # d = 46269
+        clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
+        self.assertEqual(
+            RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
+            opText
+        )
+    
+    def test_check_encrypt_text_5(self):
+        opText = 'HELLO'
+        n = 59648035252803565764227662109371319537837522368439
+        e = 8156951389676008934211584
+        d = 3571970090168332389047108527885612809115816588462
+        n = 227923
+        e = 31
+        d = 7319
+        clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
+        self.assertEqual(
+            RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
+            opText
+        )
+
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() 
