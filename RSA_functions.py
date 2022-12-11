@@ -83,8 +83,9 @@ def calc_Euler_func(p, q): # Вычисление функции Эйлера
 
 def calc_exp_encrypt(phi): # Вычисление экспоненты зашифрования
     e = get_random_prime()
-    if (e != NOD(e, phi)):
-        return int(e / NOD(e, phi))
+    while (e == NOD(e, phi)):
+        e = get_random_prime()
+    return int(e / NOD(e, phi))
 
 def calc_exp_decrypt(e, phi): # Вычисление экспоненты расшифрования
     return extended_euclidean_algorithm(e, phi)
