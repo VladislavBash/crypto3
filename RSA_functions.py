@@ -2,13 +2,8 @@ from random import randint
 import math
 POW = 20
 MODEL_NUMBER = 10**POW
-# MODEL_NUMBER = 100
 MIN_INT = MODEL_NUMBER
 MAX_INT = MODEL_NUMBER * 10**5
-# MIN_INT = 20000000000000000000000000000000000000000000000000000000000000000000000000
-# MAX_INT = 20000000000000000000000000000000000000000000000000000000000000000000000000000000
-# MIN_INT = 180
-# MAX_INT = 200
 T = 100
 
 def get_random_prime():
@@ -83,9 +78,12 @@ def calc_Euler_func(p, q): # Вычисление функции Эйлера
 
 def calc_exp_encrypt(phi): # Вычисление экспоненты зашифрования
     e = get_random_prime()
-    while (e == NOD(e, phi)):
-        e = get_random_prime()
-    return int(e / NOD(e, phi))
+    # while (e == NOD(e, phi)):
+    #     e = get_random_prime()
+    # return int(e / NOD(e, phi))
+    while (NOD(e, phi) != 1):
+        e /= NOD(e, phi)
+    return e
 
 def calc_exp_decrypt(e, phi): # Вычисление экспоненты расшифрования
     return extended_euclidean_algorithm(e, phi)
@@ -103,14 +101,16 @@ def encrypt(m, e, n): # Зашифрование
     if len(bit_str) % 8 != 0:
         bit_str = ('0' * (8 - (len(bit_str) % 8))) + bit_str
     
-    bit_str = bit_str[::-1]
+    # bit_str = bit_str[::-1]
 
     for i in range(int(len(bit_str)/8)):
         temp_str = bit_str[8*i:8*(i+1)]
-        # c.append(int(temp_str[::-1], 2))
-        c_str += chr(int(temp_str[::-1], 2))
-    # c.reverse()
-    return c_str[::-1]
+           # c.append(int(temp_str[::-1], 2))
+        # c_str += chr(int(temp_str[::-1], 2))
+        c_str += chr(int(temp_str, 2))
+       # c.reverse()
+    # return c_str[::-1]
+    return c_str
 
 def decrypt(c, d, n): # Расшифрование
     bit_str = ''
@@ -177,10 +177,12 @@ def get_decrypt_block(text, n):
     for sym in text:
         bit_str += format(ord(sym), '08b') # Перевод в 8-битную строку
     len_block = math.floor(math.log2(n)) + 1
-    if len(bit_str) < len_block:
+    if len(bit_str) % len_block != 0:
         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
-    elif len(bit_str) > len_block:
-        bit_str = bit_str[(len(bit_str) % len_block):]
+    # if len(bit_str) < len_block:
+    #     bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
+    # elif len(bit_str) > len_block:
+    #     bit_str = bit_str[(len(bit_str) % len_block):]
     # if len(bit_str) % len_block != 0:
     #     bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
     # bit_str = bit_str[::-1]

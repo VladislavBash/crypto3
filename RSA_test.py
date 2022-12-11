@@ -76,6 +76,12 @@ class NOD_Test(unittest.TestCase):
             3
         )
 
+    def test_check_nod_6(self):
+        self.assertEqual(
+            RSA_functions.NOD(59648035252803565764227646564662501437646093662200, 8156951389676008934211584),
+            8
+        )
+
 class Pow_Mod_Test(unittest.TestCase):
     def test_check_pow_mod_1(self):
         self.assertEqual(
@@ -195,6 +201,21 @@ class Encrypt_Text_Test(unittest.TestCase):
         )
 
     def test_check_encrypt_text_4(self):
+        # opText = 'Mission planners had two primary goals in deciding on the landing site: to sample lunar highland material older than Mare Imbrium and to investigate the possibility of relatively recent volcanic activity. They therefore selected Taurus-Littrow, where formations that had been viewed and pictured from orbit were thought to be volcanic in nature. Since all three crew members had backed up previous Apollo lunar missions, they were familiar with the Apollo spacecraft and had had more time for geology training.'
+        # n = 21583
+        # e = 13
+        # d = 1637
+        opText = 'ALICE WAS BEGINNING TO GET VERY TIRED OF SITTING BY HER SISTER ON THE BANK AND OF HAVING NOTHING TO DO ONCE OR TWICE SHE HAD PEEPED INTO THE BOOK HER SISTER WAS READING, BUT IT HAD NO PICTURES OR CONVERSATIONS IN IT AND WHAT IS THE USE OF A BOOK THOUGHT ALICE WITHOUT PICTURES OR CONVERSATIONS'
+        n = 1461
+        e = 47
+        d = 1427
+        clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
+        self.assertEqual(
+            RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
+            opText
+        )
+
+    def test_check_encrypt_text_5(self):
         opText = 'HELLO'
         e, n, d = RSA_functions.gen_keys()
         e = int(e)
@@ -208,15 +229,16 @@ class Encrypt_Text_Test(unittest.TestCase):
             RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
             opText
         )
-    
-    def test_check_encrypt_text_5(self):
-        opText = 'HELLO'
-        n = 59648035252803565764227662109371319537837522368439
-        e = 8156951389676008934211584
-        d = 3571970090168332389047108527885612809115816588462
-        n = 227923
-        e = 31
-        d = 7319
+
+    def test_check_encrypt_text_6(self):
+        opText = 'ALICE WAS BEGINNING TO GET VERY TIRED OF SITTING BY HER SISTER ON THE BANK AND OF HAVING NOTHING TO DO ONCE OR TWICE SHE HAD PEEPED INTO THE BOOK HER SISTER WAS READING, BUT IT HAD NO PICTURES OR CONVERSATIONS IN IT AND WHAT IS THE USE OF A BOOK THOUGHT ALICE WITHOUT PICTURES OR CONVERSATIONS'
+        e, n, d = RSA_functions.gen_keys()
+        e = int(e)
+        n = int(n)
+        d = int(d)
+        # n = 38809
+        # e = 181
+        # d = 46269
         clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
         self.assertEqual(
             RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
