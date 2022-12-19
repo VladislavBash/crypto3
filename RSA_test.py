@@ -323,5 +323,28 @@ class Encrypt_Text_Test(unittest.TestCase):
             opText
         )
 
+class Main_Test(unittest.TestCase):
+    def test_check_main_test_1(self):
+        opText = '''
+        In 1969 NASA announced11 that the backup crew of Apollo 14 would be Gene Cernan Ronald Evans and former X15 pilot Joe Engle1213 This put them in line to be the prime crew of Apollo 17 because the Apollo programs crew rotation generally meant that a backup crew would fly as prime crew three missions later Harrison Schmitt who was a professional geologist as well as an astronaut had served on the backup crew of Apollo 15 and thus because of the rotation would have been due to fly as lunar module pilot on Apollo 1814
+        In September 1970 the plan to launch Apollo 18 was cancelled The scientific community pressed NASA to assign a geologist rather than a pilot with nonprofessional geological training to an Apollo landing NASA subsequently assigned Schmitt to Apollo 17 as the lunar module pilot After that NASAs director of flight crew operations Deke Slayton was left with the question of who would fill the two other Apollo 17 slots the rest of the Apollo 15 backup crew Dick Gordon and Vance Brand or Cernan and Evans from the Apollo 14 backup crew Slayton ultimately chose Cernan and Evans11 Support at NASA for assigning Cernan was not unanimous Cernan had crashed a Bell 47G helicopter into the Indian River near Cape Kennedy during a training exercise in January 1971 the accident was later attributed to pilot error as Cernan had misjudged his altitude before crashing into the water Jim McDivitt who was manager of the Apollo Spacecraft Program Office at the time objected to Cernans selection because of this accident but Slayton dismissed the concern After Cernan was offered command of the mission he advocated for Engle to fly with him on the mission but it was made clear to him that Schmitt would be assigned instead with or without Cernan so he acquiesced1516 The prime crew of Apollo 17 was publicly announced on August 13 197117
+        When assigned to Apollo 17 Cernan was a 38yearold captain in the United States Navy he had been selected in the third group of astronauts in 1963 and flown as pilot of Gemini 9A in 1966 and as lunar module pilot of Apollo 10 in 1969 before he served on Apollo 14s backup crew Evans 39 years old when assigned to Apollo 17 had been selected as part of the fifth group of astronauts in 1966 and had been a lieutenant commander in the United States Navy Schmitt a civilian was 37 years old when assigned Apollo 17 had a doctorate in geology from Harvard University and had been selected in the fourth group of astronauts in 1965 Both Evans and Schmitt were making their first spaceflights18
+        For the backup crews of Apollo 16 and 17 the final Apollo lunar missions NASA selected astronauts who had already flown Apollo lunar missions to take advantage of their experience and avoid investing time and money in training rookies who would be unlikely to ever fly an Apollo mission1920 The original backup crew for Apollo 17 announced at the same time as the prime crew17 was the crew of Apollo 15 David Scott as commander Alfred Worden as CMP and James Irwin as LMP but in May 1972 they were removed from the backup crew because of their roles in an incident known as the Apollo 15 postal covers incident21 They were replaced with the landing crew of Apollo 16 John W Young as backup crew commander Charles Duke as LMP and Apollo 14s CMP Stuart Roosa182223 Originally Apollo 16s CMP Ken Mattingly was to be assigned along with his crewmates but he declined so he could spend more time with his family his son having just been born and instead took an assignment to the Space Shuttle program24 Roosa had also served as backup CMP for Apollo 1625
+        For the Apollo program in addition to the prime and backup crews that had been used in the Mercury and Gemini programs NASA assigned a third crew of astronauts known as the support crew Their role was to provide any assistance in preparing for the missions that the missions director assigned then Preparations took place in meetings at facilities across the US and sometimes needed a member of the flight crew to attend them Because McDivitt was concerned that problems could be created if a prime or backup crew member was unable to attend a meeting Slayton created the support crews to ensure that someone would be able to attend in their stead26 Usually low in seniority they also assembled the missions rules flight plan and checklists and kept them updated2728 For Apollo 17 they were Robert F Overmyer Robert A Parker and C Gordon Fullerton29
+        Flight directors were Gerry Griffin first shift Gene Kranz and Neil B Hutchinson second shift and Pete Frank and Charles R Lewis third shift30 According to Kranz flight directors during the program Apollo had a onesentence job description The flight director may take any actions necessary for crew safety and mission success31 Capsule communicators CAPCOMs were Fullerton Parker Young Duke Mattingly Roosa Alan Shepard and Joseph P Allen32
+        '''
+        e, n, d = RSA_functions.gen_keys()
+        e = int(e)
+        n = int(n)
+        d = int(d)
+        # n = 38809
+        # e = 181
+        # d = 46269
+        clText = RSA_functions.encrypt(RSA_functions.get_encrypt_block(opText, n), e, n)
+        self.assertEqual(
+            RSA_functions.decrypt(RSA_functions.get_decrypt_block(clText, n), d, n),
+            opText
+        )
+
 if __name__ == '__main__':
     unittest.main() 
