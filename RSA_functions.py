@@ -93,7 +93,7 @@ def calc_exp_encrypt(phi): # Вычисление экспоненты заши�
 def calc_exp_decrypt(e, phi): # Вычисление экспоненты расшифрования
     return extended_euclidean_algorithm(e, phi)
 
-def encrypt(m, e, n): # Зашифрование
+def encrypt(m, e, n, file_type): # Зашифрование
     c = []
     bit_str = ''
     c_str = ''
@@ -103,18 +103,21 @@ def encrypt(m, e, n): # Зашифрование
         num =  pow_mod(mi, e, n)
         bit_str += str(format(num, str_len_block))
 
-    if len(bit_str) % ENCODING_BYTES != 0:
-        bit_str = ('0' * (ENCODING_BYTES - (len(bit_str) % ENCODING_BYTES))) + bit_str
+    if (file_type == 'txt'):
+
+        if len(bit_str) % ENCODING_BYTES != 0:
+            bit_str = ('0' * (ENCODING_BYTES - (len(bit_str) % ENCODING_BYTES))) + bit_str
     
 
-    for i in range(int(len(bit_str)/ENCODING_BYTES)):
-        temp_str = bit_str[ENCODING_BYTES*i:ENCODING_BYTES*(i+1)]
+        for i in range(int(len(bit_str)/ENCODING_BYTES)):
+            temp_str = bit_str[ENCODING_BYTES*i:ENCODING_BYTES*(i+1)]
         
-        c_str += chr(int(temp_str, 2))
-        
+            c_str += chr(int(temp_str, 2))
+    else:
+        return bit_str
     return c_str
 
-def decrypt(c, d, n): # Расшифрование
+def decrypt(c, d, n, file_type): # Расшифрование
     bit_str = ''
     c_str = ''
     len_block = math.floor(math.log2(n))
@@ -123,18 +126,19 @@ def decrypt(c, d, n): # Расшифрование
         num =  pow_mod(ci, d, n)
         bit_str += str(format(num, str_len_block))
 
-    if len(bit_str) % ENCODING_BYTES != 0:
-        bit_str = ('0' * (ENCODING_BYTES - (len(bit_str) % ENCODING_BYTES))) + bit_str
+    # if (file_type == 'txt'):
+    if (file_type == 'txt'):
+        if len(bit_str) % ENCODING_BYTES != 0:
+            bit_str = ('0' * (ENCODING_BYTES - (len(bit_str) % ENCODING_BYTES))) + bit_str
 
         
-    for i in range(int(len(bit_str)/ENCODING_BYTES)):
-        temp_str = bit_str[ENCODING_BYTES*i:ENCODING_BYTES*(i+1)]
+        for i in range(int(len(bit_str)/ENCODING_BYTES)):
+            temp_str = bit_str[ENCODING_BYTES*i:ENCODING_BYTES*(i+1)]
         
-        if temp_str != '00000000':
-            c_str += chr(int(temp_str, 2))
-        if c_str == 'In 1969 NASA announced11 that the backup crew of Apollo 14':
-            pass
-            
+            if temp_str != '00000000':
+                c_str += chr(int(temp_str, 2))
+    else:
+        return bit_str
     return c_str
 
 def gen_keys():
@@ -150,12 +154,15 @@ def gen_keys():
     d += phi
     return e, n, d
 
-def get_encrypt_block(text, n):
+def get_encrypt_block(text, n, file_type):
     block = []
     bit_str = ''
     
     for sym in text:
-        bit_str += format(ord(sym), '0' + str(ENCODING_BYTES) + 'b') # Перевод в ENCODING_BYTES-битную строку
+        if (file_type == 'txt'):
+            bit_str += format(ord(sym), '0' + str(ENCODING_BYTES) + 'b') # Перевод в ENCODING_BYTES-битную строку
+        else:
+            bit_str += format(sym, '0' + str(ENCODING_BYTES) + 'b')
     len_block = math.floor(math.log2(n))
     if len(bit_str) % len_block != 0:
         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
@@ -165,12 +172,15 @@ def get_encrypt_block(text, n):
     block.reverse()
     return block
 
-def get_decrypt_block(text, n):
+def get_decrypt_block(text, n, file_type):
     block = []
     bit_str = ''
     
     for sym in text:
-        bit_str += format(ord(sym), '0' + str(ENCODING_BYTES) + 'b') # Перевод в ENCODING_BYTES-битную строку
+        if (file_type == 'txt'):
+            bit_str += format(ord(sym), '0' + str(ENCODING_BYTES) + 'b') # Перевод в ENCODING_BYTES-битную строку
+        else:
+            bit_str += format(sym, '0' + str(ENCODING_BYTES) + 'b')
     len_block = math.floor(math.log2(n)) + 1
     if len(bit_str) % len_block != 0:
         bit_str = ('0' * (len_block - (len(bit_str) % len_block))) + bit_str
